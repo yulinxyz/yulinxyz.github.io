@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雨林下载站1</title>
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4cc9f0;
+            --warning-color: #f8961e;
+            --danger-color: #f72585;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .search-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+        
+        .search-box {
+            display: flex;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 50px;
+            overflow: hidden;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .search-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .search-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .download-section {
+            margin: 3rem 0;
+            animation: fadeInUp 0.8s ease-out 0.5s both;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+        
+        .file-list {
+            list-style: none;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .file-item {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+        
+        .file-item:last-child {
+            border-bottom: none;
+        }
+        
+        .file-item:hover {
+            background-color: #f8f9fa;
+            transform: translateX(5px);
+        }
+        
+        .file-info {
+            flex: 1;
+        }
+        
+        .file-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark-color);
+        }
+        
+        .file-meta {
+            font-size: 0.9rem;
+            color: #6c757d;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .file-size, .file-date {
+            display: flex;
+            align-items: center;
+        }
+        
+        .file-size::before {
+            content: '📦';
+            margin-right: 5px;
+        }
+        
+        .file-date::before {
+            content: '📅';
+            margin-right: 5px;
+        }
+        
+        .download-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .download-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+        }
+        
+        .category-filter {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .category-btn {
+            padding: 8px 16px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .category-btn:hover, .category-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            background-color: var(--dark-color);
+            color: white;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .file-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .download-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>雨林资源下载站</h1>
+            <p class="subtitle">QQ2574747956</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="搜索资源...">
+                <button class="search-btn">搜索</button>
+            </div>
+        </div>
+        
+        <div class="download-section">
+            <h2 class="section-title">热门下载</h2>
+            
+            <div class="category-filter">
+                <button class="category-btn active">全部</button>
+                <button class="category-btn">软件</button>
+                <button class="category-btn">文档</button>
+                <button class="category-btn">图片</button>
+                <button class="category-btn">视频</button>
+                <button class="category-btn">音频</button>
+            </div>
+            
+            <ul class="file-list" id="fileList">
+                <!-- 文件列表将通过JavaScript动态生成 -->
+            </ul>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>© 2023 优质资源下载站 | 所有资源仅供学习交流使用</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 模拟数据 - 实际应用中可以从服务器获取
+        const fileData = [
+            {
+                id: 1,
+                name: "QQwry.dat[雨林远控专用]",
+                size: "6.57 MB",
+                date: "2025-3-26",
+                category: "全部",
+                url: "https://yulinxyz.github.io/downloads/QQwry.dat"
+            }
+        ];
+        
+        // 渲染文件列表
+        function renderFileList(files = fileData) {
+            const fileListEl = document.getElementById('fileList');
+            fileListEl.innerHTML = '';
+            
+            files.forEach(file => {
+                const fileItem = document.createElement('li');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <div class="file-info">
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-meta">
+                            <span class="file-size">${file.size}</span>
+                            <span class="file-date">${file.date}</span>
+                            <span class="file-category">${file.category}</span>
+                        </div>
+                    </div>
+                    <button class="download-btn" data-id="${file.id}">
+                        <span>下载</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                    </button>
+                `;
+                fileListEl.appendChild(fileItem);
+            });
+            
+            // 添加下载按钮事件
+            document.querySelectorAll('.download-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const fileId = this.getAttribute('data-id');
+                    downloadFile(fileId);
+                });
+            });
+        }
+        
+        // 模拟下载功能
+        function downloadFile(fileId) {
+            const file = fileData.find(f => f.id == fileId);
+            if (file) {
+                // 实际应用中这里应该是真实的下载逻辑
+                alert(`开始下载: ${file.name}\n大小: ${file.size}`);
+                
+                // 模拟下载动画
+                const btn = document.querySelector(`.download-btn[data-id="${fileId}"]`);
+                btn.innerHTML = '<span>下载中...</span>';
+                btn.style.backgroundColor = '#6c757d';
+                
+                setTimeout(() => {
+                    btn.innerHTML = '<span>下载完成</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>';
+                    btn.style.backgroundColor = '#28a745';
+                    
+                    // 3秒后恢复原状
+                    setTimeout(() => {
+                        btn.innerHTML = '<span>下载</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>';
+                        btn.style.backgroundColor = '#4361ee';
+                    }, 3000);
+                }, 1500);
+            }
+        }
+        
+        // 分类筛选
+        function setupCategoryFilter() {
+            const categoryBtns = document.querySelectorAll('.category-btn');
+            
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 更新活动按钮样式
+                    categoryBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const category = this.textContent;
+                    if (category === '全部') {
+                        renderFileList();
+                    } else {
+                        const filteredFiles = fileData.filter(file => file.category === category);
+                        renderFileList(filteredFiles);
+                    }
+                });
+            });
+        }
+        
+        // 搜索功能
+        function setupSearch() {
+            const searchInput = document.querySelector('.search-input');
+            const searchBtn = document.querySelector('.search-btn');
+            
+            const performSearch = () => {
+                const keyword = searchInput.value.trim().toLowerCase();
+                if (keyword) {
+                    const results = fileData.filter(file => 
+                        file.name.toLowerCase().includes(keyword) || 
+                        file.category.toLowerCase().includes(keyword)
+                    );
+                    renderFileList(results);
+                } else {
+                    renderFileList();
+                }
+            };
+            
+            searchBtn.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') performSearch();
+            });
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            renderFileList();
+            setupCategoryFilter();
+            setupSearch();
+        });
+    </script>
+</body>
+</html>
